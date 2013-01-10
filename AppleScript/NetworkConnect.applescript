@@ -15,13 +15,12 @@ on run {wifiname, VPNname, shareList, serverList}
 	set parentDir to POSIX path of result
 	set scriptdirectory to (parentDir & "AppleScript/")
 	
-	set currentWifi to do shell script "networksetup -getairportnetwork en1 | awk '{print $4}'"
+	set wifiDeviceName to do shell script "networksetup -listallhardwareports | awk '/Hardware Port: Wi-Fi/{getline;print $2}'"
+	set currentWifi to do shell script "networksetup -getairportnetwork " & wifiDeviceName & " | awk '{print $4}'"
 	
 	if currentWifi is not wifiname then
 		run script (scriptdirectory & "VPNConnect.scpt" as POSIX file) with parameters VPNname
 	end if
-	display dialog shareList
-	display dialog serverList
 	run script (scriptdirectory & "SMB_Connect.scpt" as POSIX file) with parameters {shareList, serverList}
 end run
 
