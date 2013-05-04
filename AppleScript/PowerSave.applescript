@@ -22,9 +22,6 @@ Please select the \"Enable access for assistive devices\" checkbox and trigger t
 		end tell
 	end if
 	
-	(* Apps to turn on/off *)
-	set powerHungryApps to {"Thunderbird", "iTunes", "Notify", "Google Notifier"}
-	
 	(* Get path to working directory *)
 	set d to text item delimiters
 	set text item delimiters to "/"
@@ -82,17 +79,17 @@ Use UI scripting of System Preferences to change settings of screen brightness, 
 			delay 2
 			click radio button "Keyboard" of tab group 1 of window "Keyboard"
 			delay 1
-			if (value of checkbox "Illuminate keyboard in low light conditions" of tab group 1 of window "Keyboard" is checkBoxVal) then
-				click checkbox "Illuminate keyboard in low light conditions" of tab group 1 of window "Keyboard"
+			if (value of checkbox "Adjust keyboard brightness in low light" of tab group 1 of window "Keyboard" is checkBoxVal) then
+				click checkbox "Adjust keyboard brightness in low light" of tab group 1 of window "Keyboard"
 			end if
 			
 			try --use try here because this part will fail if there are other monitors connected 
 				click menu item "Displays" of menu "View" of menu bar 1
 				delay 2
-				if (value of checkbox "Automatically adjust brightness as ambient light changes" of group 2 of tab group 1 of window "Color LCD" is checkBoxVal) then
-					click checkbox "Automatically adjust brightness as ambient light changes" of group 2 of tab group 1 of window "Color LCD"
+				if (value of checkbox "Automatically adjust brightness" of group 1 of tab group 1 of window "Color LCD" is checkBoxVal) then
+					click checkbox "Automatically adjust brightness" of group 1 of tab group 1 of window "Color LCD"
 				end if
-				set value of slider 1 of group 2 of tab group 1 of window "Color LCD" to brightness
+				set value of slider 1 of group 1 of tab group 1 of window "Color LCD" to brightness
 			end try
 		end tell
 	end tell
@@ -106,7 +103,7 @@ For fun, use networksetup and shell commands to turn off AirPort rather than Sys
 *)
 	
 	(* Get AirPort device name *)
-	set devName to do shell script "networksetup -listallhardwareports | grep -A1 \"AirPort\" | awk '{ if ($1 == \"Device:\") print $2 }'"
+	set devName to do shell script "networksetup -listallhardwareports | grep -A1 \"Wi-Fi\" | awk '{ if ($1 == \"Device:\") print $2 }'"
 	(* Get AirPort power state *)
 	set airportPower to do shell script "networksetup -getairportpower " & devName & " | awk '{print $4}'"
 	(* Toggle AirPort power state if necessary *)
