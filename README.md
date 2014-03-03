@@ -25,3 +25,15 @@ The way I like to set up most of my AppleScripts is to write one script (.scpt) 
 
 * For an example of an application script that calls an AppleScript and functions as a *droplet* (you can drop other files onto its icon to have those files be the input to the called AppleScript) or as an application (it prompts to select the files to pass to the called AppleScript if you double-click on its icon), see `CompressImages.applescript`.
 
+Enabling access for assistive devices
+=====================================
+Some of the scripts use the hack of clicking on UI elements with OS X's
+accessibility functions (because there is no obvious way of scripting their
+functionality directly).  Old versions of the scripts would check that the
+accessibility functionality was enabled and help the user enable it if it was
+not.  With Mavericks, this functionality must be turned on on a per-app basis.
+When an app tries to use this functionality, if it does not have permission, OS
+X prompts the user to enable the app if desired, so the scripts no longer
+provide any prompting of their own.  They will fail on first run but should work
+after they have been given permission to use the accessibility features.
+
