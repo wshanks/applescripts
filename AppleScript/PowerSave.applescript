@@ -9,19 +9,6 @@ the Universal Access window of System Preferences.
 *)
 
 on run {powerHungryApps}
-	(* Check if UI scripting is enabled. If not, then show a dialog explaining that it must be enabled and open the window in which it can be enabled. *)
-	tell application "System Events" to set isUIScriptingEnabled to UI elements enabled
-	if isUIScriptingEnabled = false then
-		tell application "System Preferences"
-			activate
-			set current pane to pane "com.apple.preference.universalaccess"
-			display dialog "Your system is not properly configured to run this script. 
-
-Please select the \"Enable access for assistive devices\" checkbox and trigger the script again to proceed."
-			return 0
-		end tell
-	end if
-	
 	(* Get path to working directory *)
 	set d to text item delimiters
 	set text item delimiters to "/"
@@ -69,10 +56,17 @@ Use UI scripting of System Preferences to change settings of screen brightness, 
 	
 	tell application "System Events"
 		tell process "System Preferences"
-			click menu item "Bluetooth" of menu "View" of menu bar 1
+			set frontmost to true
+			click menu item "Bluetooth" of menu 1 of menu bar item "View" of menu bar 1
 			delay 2
-			if (value of checkbox "On" of window "Bluetooth" is checkBoxVal) then
-				click checkbox "On" of window "Bluetooth"
+			if (powerMode is "on") then
+				try
+					click button "Turn Bluetooth Off" of window "Bluetooth"
+				end try
+			else
+				try
+					click button "Turn Bluetooth On" of window "Bluetooth"
+				end try
 			end if
 			
 			click menu item "Keyboard" of menu "View" of menu bar 1
@@ -86,10 +80,10 @@ Use UI scripting of System Preferences to change settings of screen brightness, 
 			try --use try here because this part will fail if there are other monitors connected 
 				click menu item "Displays" of menu "View" of menu bar 1
 				delay 2
-				if (value of checkbox "Automatically adjust brightness" of group 1 of tab group 1 of window "Color LCD" is checkBoxVal) then
-					click checkbox "Automatically adjust brightness" of group 1 of tab group 1 of window "Color LCD"
+				if (value of checkbox "Automatically adjust brightness" of group 1 of tab group 1 of window "Built-in Display" is checkBoxVal) then
+					click checkbox "Automatically adjust brightness" of group 1 of tab group 1 of window "Built-in Display"
 				end if
-				set value of slider 1 of group 1 of tab group 1 of window "Color LCD" to brightness
+				set value of slider 1 of group 1 of tab group 1 of window "Built-in Display" to brightness
 			end try
 		end tell
 	end tell
