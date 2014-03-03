@@ -27,13 +27,8 @@ The way I like to set up most of my AppleScripts is to write one script (.scpt) 
 
 Enabling access for assistive devices
 =====================================
-Some of the scripts use the hack of clicking on UI elements with OS X's
-accessibility functions (because there is no obvious way of scripting their
-functionality directly).  Old versions of the scripts would check that the
-accessibility functionality was enabled and help the user enable it if it was
-not.  With Mavericks, this functionality must be turned on on a per-app basis.
-When an app tries to use this functionality, if it does not have permission, OS
-X prompts the user to enable the app if desired, so the scripts no longer
-provide any prompting of their own.  They will fail on first run but should work
-after they have been given permission to use the accessibility features.
+Some of the scripts use the hack of clicking on UI elements with OS X's accessibility functions (because there is no obvious way of scripting their functionality directly).  Old versions of the scripts would check that the accessibility functionality was enabled and help the user enable it if it was not.  With Mavericks, this functionality must be turned on on a per-app basis. When an app tries to use this functionality, if it does not have permission, OS X prompts the user to enable the app if desired, so the scripts no longer provide any prompting of their own.  They will fail on first run but should work after they have been given permission to use the accessibility features.  Here is one [reference](http://www.tekrevue.com/how-to-enable-access-for-assistive-devices-in-os-x-mavericks/) on this change in behavior.
 
+Mountain Lion support
+=====================
+The final commit before the scripts were updated for Mavericks has been tagged as "mountain-lion".  This commit might work with Lion and Snow Leopard as well.
