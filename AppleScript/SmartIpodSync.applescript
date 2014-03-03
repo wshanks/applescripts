@@ -22,21 +22,6 @@ if (count of ipodList) is 0 then
 	return 0 -- No iPods connected
 end if
 
--- Check if UI scripting is enabled
--- If not, then show a dialog explaining that it must be enabled
--- and open the window in which it can be enabled.
-tell application "System Events" to set isUIScriptingEnabled to UI elements enabled
-if isUIScriptingEnabled = false then
-	tell application "System Preferences"
-		activate
-		set current pane to pane "com.apple.preference.universalaccess"
-		display dialog "Your system is not properly configured to run this script. 
-
-Please select the \"Enable access for assistive devices\" checkbox and trigger the script again to proceed."
-		return 0
-	end tell
-end if
-
 tell application "iTunes"
 	--First delete played podcasts so they are not sync'ed below
 	set podcastList to file tracks of user playlist "Podcasts"
@@ -130,7 +115,11 @@ on waitForSync()
 			--With iTunes 11, the sync is complete message is hidden in the status window
 			--and has to be scrolled to.  Just loop through status window views here so that the script 
 			--isn't dependent on the window's status.
-			click ((buttons of scroll area 1 of window "iTunes") whose description is "show next view")
+			-- The try statement was added to avoid errors when there are 0 or 1 messages and 
+			-- so no buttons to click.
+			try
+				click ((buttons of scroll area 1 of window "iTunes") whose description is "show next view")
+			end try
 			set theStatusText to value of static text 1 of scroll area 1 of window "iTunes"
 			delay 1
 		end repeat
