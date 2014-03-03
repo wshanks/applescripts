@@ -8,7 +8,7 @@ if iTunesRunning then
 end if
 
 
-set protectedDisks to {""}
+set protectedDisks to {}
 run script (scriptdirectory & "EjectDisks.scpt" as POSIX file) with parameters {protectedDisks}
 
 run script (scriptdirectory & "VPNDisconnect.scpt" as POSIX file)
