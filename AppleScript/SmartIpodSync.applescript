@@ -24,6 +24,7 @@ end if
 
 tell application "iTunes"
 	--First delete played podcasts so they are not sync'ed below
+	(* iTunes 11.2 re-downloads podcasts deleted in this way
 	set podcastList to file tracks of user playlist "Podcasts"
 	repeat with tempPodcast in podcastList
 		if played count of tempPodcast > 0 then
@@ -34,6 +35,7 @@ tell application "iTunes"
 			delete tempPodcast
 		end if
 	end repeat
+	*)
 	
 	-- Loop through
 	repeat with ipodName in ipodList
@@ -125,61 +127,3 @@ on waitForSync()
 		end repeat
 	end tell
 end waitForSync
-(*
-on waitForEject(ipodName)
-	tell application "iTunes"
-		set ejected to false
-		set ipodList to {}
-		repeat until ejected is true
-			try -- Avoid error if there are no iPods connected
-				set ipodList to (name of every source whose kind is iPod)
-			end try
-			if ipodName is not in ipodList then
-				set ejected to true
-			end if
-			delay 1
-		end repeat
-	end tell
-end waitForEject
-
--- This function did help....
-on remountIpods()
-	set ipodList to {}
-	
-	tell application "Finder"
-		set currentDisks to the name of every disk
-	end tell
-	
-	set mediaTypes to {}
-	repeat with tempDisk in currentDisks
-		set mediaType to do shell script "diskutil info '" & tempDisk & "' | grep \"Media Type:\" | awk '{print $3}'"
-		set mediaTypes to mediaTypes & mediaType
-	end repeat
-	
-	tell application "iTunes"
-		-- Get list of connected iPods
-		try -- Avoid error if there are no iPods connected
-			set ipodList to (name of every source whose kind is iPod)
-		end try
-	end tell
-	
-	repeat with i from 1 to count of currentDisks
-		if (item i of mediaTypes is "iPod") then
-			set tempDisk to item i of currentDisks
-			if (tempDisk is not in ipodList) then
-				do shell script "diskutil unmountDisk \"" & tempDisk & "\""
-				do shell script "diskutil mountDisk \"" & tempDisk & "\""
-			end if
-		end if
-	end repeat
-	
-	tell application "iTunes"
-		-- Get list of connected iPods
-		try -- Avoid error if there are no iPods connected
-			set ipodList to (name of every source whose kind is iPod)
-		end try
-	end tell
-	
-	return ipodList
-end remountIpods
-*)
